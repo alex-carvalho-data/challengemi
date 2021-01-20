@@ -1,0 +1,32 @@
+# Use root/alex as user/password credentials
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo:4.4-bionic
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: alex123
+
+  mongo-express:
+    image: mongo-express:0.54
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: alex123
+
+  postgres:
+    image: postgres:13.1
+    restart: always
+    environment:
+      - POSTGRES_DB=mipostgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=alex123
+    ports:
+      - '5432:5432'
