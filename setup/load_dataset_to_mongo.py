@@ -12,10 +12,20 @@ MONGO_COLLECTION = 'hearing_test'
 
 
 class MongoDatasetLoader:
+    """ This class is responsible to read a json dataset file present at the
+        local File System and load it into a MongoDB
+    """
     def __init__(self,
                  mongo_uri=MONGO_URI,
                  mongo_db=MONGO_DB,
                  mongo_collection=MONGO_COLLECTION):
+        """ Creates a new MongoDatasetLoader.
+            It sets up the log engine and it creates a SparkSession
+
+        :param mongo_uri: URI to connect to MongoDB
+        :param mongo_db: MongoDB database name
+        :param mongo_collection: MongoDB collection name
+        """
         self.start_time = datetime.now()
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
@@ -50,6 +60,17 @@ class MongoDatasetLoader:
         logging.info('  end: {}'.format(datetime.now()))
 
     def load(self, json_dataset_file):
+        """ Main method. It orchestrates the json file read and MongoDB load
+
+        :param json_dataset_file: path for the json dataset file.
+            The path starts at the root folder of this project
+            Ex.: load('dataset/challenge_hearing_tests.json')
+                if the root dir is:
+                    /usr/alex/challengemi
+                the file would be placed at:
+                    # /usr/alex/challengemi/dataset/challenge_hearing_tests.json
+        :return: None
+        """
         self._log_header(json_dataset_file)
 
         logging.info('reading df from json dataset file')

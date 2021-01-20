@@ -7,6 +7,7 @@ dataset/challenge_sample3.json
 
 # Test file
 setup/load_sample_json_to_mongo.py
+setup/create_tables.sql
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

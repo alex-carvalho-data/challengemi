@@ -8,6 +8,7 @@ CHANGE_ME
 - docker (used version 20.10.2)
 - docker-compose (used version 1.27.4)
 - python (used version 3.7.9 )
+- linux (used version ubuntu 20.04)
 
 ## Environment
 
@@ -55,7 +56,16 @@ docker-compose down -v
 
 ## Setup
 
-### python dependencies
+### Linux dependencies
+
+In order to connect to PostgreSQL some Linux packages are required.  
+Install them with the following commands:
+```shell
+sudo apt update
+sudo apt-get install libpq-dev python-dev python3.7-dev
+```
+
+### Python dependencies
 
 CHANGE_ME
 
@@ -72,7 +82,16 @@ spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.0 setup
 
 ### Create PostgreSQL DB
 
-CHANGE_ME
+From the root folder of this project, execute the following command to create
+the PostgreSQL DB schema:
+```shell
+python3 setup/create_mipostgres_schema.py
+```
+
+If your Linux distribution isn't Ubuntu, the command may be:
+```shell
+python setup/create_mipostgres_schema.py
+```
 
 ## Pipeline Execution
 
