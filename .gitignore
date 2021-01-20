@@ -1,6 +1,13 @@
 # PyCharm
 .idea/
 
+# Dataset
+dataset/challenge_hearing_tests.json
+dataset/challenge_sample3.json
+
+# Test file
+setup/load_sample_json_to_mongo.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
