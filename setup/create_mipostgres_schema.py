@@ -29,9 +29,7 @@ TABLES_DDL = (
            ( id serial primary key,
              hearing_test_id varchar(50) not null,
              side varchar(5),
-             name varchar(50),
-             frequency numeric,
-             threshold_db numeric,
+             pta4 numeric,
              unique (hearing_test_id, side),
              foreign key (hearing_test_id)
                 references hearing_tests (id) )
