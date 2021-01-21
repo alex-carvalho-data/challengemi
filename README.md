@@ -1,7 +1,16 @@
 # challenge mi
 
-Description goes here  
-CHANGE_ME
+This project creates a pipeline that reads a MongoDB base, cleans and enrich 
+its data and finally normalize it and save in a PostgreSQL db.
+
+For tests purposes, a docker environment was defined and should be executed 
+using docker-compose.
+
+The code was written using spark.  
+Currently, the code is set to be executed locally, in a single machine.  
+However, the code is prepared to easily change the submission destination to a 
+cluster and in this gain a considerable amount of performance in case to 
+process larger datasets.
 
 ## Requirements
 
@@ -66,8 +75,11 @@ sudo apt-get install libpq-dev python-dev python3.7-dev
 ```
 
 ### Python dependencies
-
-CHANGE_ME
+From the root folder of this project, execute the following command to install
+the python packages required for this project:
+```shell
+pip install -r requirements.txt
+```
 
 ### Load MongoDB
 
@@ -95,4 +107,13 @@ python setup/create_mipostgres_schema.py
 
 ## Pipeline Execution
 
-CHANGE_ME
+From the root folder of this project, execute the following command in order to
+execute the pipeline:  
+```shell
+# spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.0 --jars postgresql-42.2.18.jar pipeline_mongo_postgres.py
+```
+
+## Questions and Code Considerations
+
+The answers for this challenge can be found in this project at:  
+answers/README.md

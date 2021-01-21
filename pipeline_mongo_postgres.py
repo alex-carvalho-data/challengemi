@@ -263,15 +263,38 @@ class HearingTestsPipeline:
     def _get_audiograms_df(hearing_tests_df):
         logging.info('generating audiograms DataFrame')
 
+        """
         audiograms_df = \
             hearing_tests_df\
                 .select(hearing_tests_df.id,
+                        hearing_tests_df.results.side,
                         explode(flatten(hearing_tests_df.results.audiograms))
                         .alias('audiogram'))
 
         audiograms_df = \
             audiograms_df\
                 .select(audiograms_df.id.alias('hearing_test_id'),
+                        audiograms_df.audiogram.freq_hz.alias('freq_hz'),
+                        audiograms_df.audiogram.threshold_db
+                        .alias('threshold_db'))
+        """
+
+        audiograms_df = \
+            hearing_tests_df \
+                .select(hearing_tests_df.id,
+                        explode(hearing_tests_df.results).alias('result'))
+
+        audiograms_df = \
+            audiograms_df \
+                .select(audiograms_df.id,
+                        audiograms_df.result.side.alias('side'),
+                        explode(audiograms_df.result.audiograms)
+                        .alias('audiogram'))
+
+        audiograms_df = \
+            audiograms_df \
+                .select(audiograms_df.id.alias('hearing_test_id'),
+                        audiograms_df.side,
                         audiograms_df.audiogram.freq_hz.alias('freq_hz'),
                         audiograms_df.audiogram.threshold_db
                         .alias('threshold_db'))
@@ -322,31 +345,7 @@ class HearingTestsPipeline:
 
         return insights_df
 
-    @staticmethod
-    def _get_noise_measurements_df(hearing_tests_df):
-        logging.info('generating noises mesurements DataFrame')
 
-        noise_measurements_df = \
-            hearing_tests_df\
-                .select(hearing_tests_df.id,
-                        explode(
-                            flatten(
-                                hearing_tests_df.results.noise.measurements)
-                        ).alias('noise_measurement'))
-
-        noise_measurements_df = \
-            noise_measurements_df\
-                .select(noise_measurements_df.id.alias('hearing_test_id'),
-                        noise_measurements_df.noise_measurement.mean_db
-                        .alias('mean_db'),
-                        to_timestamp(
-                            noise_measurements_df.noise_measurement.timestamp)
-                        .alias('measure_timestamp'))
-
-        noise_measurements_df.show(truncate=False)
-        noise_measurements_df.printSchema()
-
-        return noise_measurements_df
 
     @staticmethod
     def _get_noises_df(hearing_tests_df):
@@ -371,6 +370,38 @@ class HearingTestsPipeline:
         noises_df.printSchema()
 
         return noises_df
+
+    @staticmethod
+    def _get_noise_measurements_df(hearing_tests_df):
+        logging.info('generating noises mesurements DataFrame')
+
+        noise_measurements_df = \
+            hearing_tests_df \
+                .select(hearing_tests_df.id,
+                        explode(hearing_tests_df.results).alias('result'))
+
+        noise_measurements_df = \
+            noise_measurements_df \
+                .select(noise_measurements_df.id,
+                        noise_measurements_df.result.side.alias('side'),
+                        explode(
+                            noise_measurements_df.result.noise.measurements)
+                        .alias('measurement'))
+
+        noise_measurements_df = \
+            noise_measurements_df \
+                .select(noise_measurements_df.id.alias('hearing_test_id'),
+                        noise_measurements_df.side,
+                        noise_measurements_df.measurement.mean_db
+                        .alias('mean_db'),
+                        to_timestamp(
+                            noise_measurements_df.measurement.timestamp)
+                        .alias('measure_timestamp'))
+
+        noise_measurements_df.show(truncate=False)
+        noise_measurements_df.printSchema()
+
+        return noise_measurements_df
 
     @staticmethod
     def _get_users_df(hearing_tests_df):
